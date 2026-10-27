@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:blessing/core/helpers/course_content_type_adapter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -17,8 +16,13 @@ class CacheUtil {
   CacheUtil._();
 
   Future<void> init() async {
-    final Directory appSupportDir = await getApplicationSupportDirectory();
-    await Hive.initFlutter(appSupportDir.path);
+    if (kIsWeb) {
+      // No filesystem on web: Hive falls back to IndexedDB.
+      await Hive.initFlutter();
+    } else {
+      final appSupportDir = await getApplicationSupportDirectory();
+      await Hive.initFlutter(appSupportDir.path);
+    }
 
      if (!Hive.isAdapterRegistered(1)) {
       Hive.registerAdapter(CourseContentTypeAdapter());

@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:blessing/core/services/endpoints.dart';
 import 'package:blessing/core/services/http_manager.dart';
 import 'package:blessing/data/core/models/paging_response.dart';
@@ -46,7 +46,7 @@ class QuestionDataSource {
     }
   }
 
-  Future<String?> uploadImage(File imageFile) async {
+  Future<String?> uploadImage(XFile imageFile) async {
     try {
       final url = Endpoints.uploadQuestionImageForAdmin;
       final response = await _httpManager.uploadFileRequest(

@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:blessing/core/global_components/web_youtube_player.dart';
 import 'package:blessing/core/utils/system_ui_util.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
@@ -21,6 +23,7 @@ class VideoPlayerScreen extends StatefulWidget {
 
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   late YoutubePlayerController _controller;
+  late final String? _videoId;
   bool _isFullScreen = false;
 
   @override
@@ -28,6 +31,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     super.initState();
 
     final videoId = YoutubePlayer.convertUrlToId(widget.videoUrl);
+    _videoId = videoId;
+
+    // The WebView based player is mobile only; web uses the iframe player.
+    if (kIsWeb) return;
 
     _controller = YoutubePlayerController(
       initialVideoId: videoId!,
@@ -70,7 +77,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    if (!kIsWeb) _controller.dispose();
     // Reset system UI menggunakan utility
     SystemUIUtil.resetSystemUI();
     super.dispose();
@@ -78,6 +85,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (kIsWeb) return _buildWeb(context);
+
     return PopScope(
       canPop: true,
       onPopInvokedWithResult: (didPop, result) {
@@ -142,6 +151,31 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildWeb(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: Text(
+          widget.title,
+          style: TextStyle(color: Colors.white, fontSize: 16.sp),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Get.back(),
+        ),
+      ),
+      body: Center(
+        child: _videoId == null
+            ? const Text(
+                'Tautan video tidak valid',
+                style: TextStyle(color: Colors.white),
+              )
+            : WebYoutubePlayer(videoId: _videoId, autoPlay: true),
       ),
     );
   }

@@ -1,6 +1,7 @@
 // lib/modules/student/quiz_attempt/controller/quiz_attempt_controller.dart
 
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:no_screenshot/no_screenshot.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:blessing/core/global_components/custom_snackbar.dart';
@@ -68,7 +69,7 @@ class QuizAttemptController extends GetxController with WidgetsBindingObserver {
 
     // Block screenshots during exam
     try {
-      NoScreenshot.instance.screenshotOff();
+      if (!kIsWeb) NoScreenshot.instance.screenshotOff();
     } catch (e) {
       debugPrint("Failed to block screenshots: $e");
     }
@@ -99,7 +100,7 @@ class QuizAttemptController extends GetxController with WidgetsBindingObserver {
   void onClose() {
     // Re-enable screenshots
     try {
-      NoScreenshot.instance.screenshotOn();
+      if (!kIsWeb) NoScreenshot.instance.screenshotOn();
     } catch (e) {
       debugPrint("Failed to re-enable screenshots: $e");
     }

@@ -1,0 +1,27 @@
+# Keep secrets, signing material and platform code out of the build context.
+.git
+.github
+.githooks
+.idx
+.vscode
+.dart_tool
+build
+.env
+.env.*
+*.pem
+*.jks
+*.jks.b64
+*.keystore
+key.properties
+google-services.json
+GoogleService-Info.plist
+android
+ios
+linux
+macos
+windows
+test
+documentation
+*.md
+Dockerfile
+.dockerignore

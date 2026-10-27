@@ -1,18 +1,18 @@
 // lib/data/core/models/question_model.dart
 
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class QuestionModel {
   final TextEditingController descriptionController = TextEditingController();
   final RxList<TextEditingController> optionControllers =
       <TextEditingController>[].obs;
-  final Rx<File?> imageFile = Rx<File?>(null);
+  final Rx<XFile?> imageFile = Rx<XFile?>(null);
   final RxInt correctAnswerIndex = 0.obs; // <-- Tambahkan ini
   final TextEditingController explanationController = TextEditingController();
   final TextEditingController videoUrlController = TextEditingController();
-  final Rx<File?> explanationImageFile = Rx<File?>(null);
+  final Rx<XFile?> explanationImageFile = Rx<XFile?>(null);
 
   QuestionModel() {
     // Memulai dengan 2 opsi jawaban default

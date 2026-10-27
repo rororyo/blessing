@@ -1,6 +1,5 @@
 // lib/modules/admin/course/controllers/create_quiz_controller.dart
 
-import 'dart:io'; // <-- Tambahkan import
 import 'package:blessing/core/global_components/custom_snackbar.dart';
 import 'package:blessing/data/core/models/content_block.dart';
 import 'package:blessing/data/core/models/question_model.dart';
@@ -100,7 +99,7 @@ class CreateQuizController extends GetxController {
       );
 
       if (pickedFile != null) {
-        questions[questionIndex].imageFile.value = File(pickedFile.path);
+        questions[questionIndex].imageFile.value = pickedFile;
       }
     } catch (e) {
       CustomSnackbar.show(
@@ -123,7 +122,7 @@ class CreateQuizController extends GetxController {
       );
 
       if (pickedFile != null) {
-        questions[questionIndex].explanationImageFile.value = File(pickedFile.path);
+        questions[questionIndex].explanationImageFile.value = pickedFile;
       }
     } catch (e) {
       CustomSnackbar.show(

@@ -1,9 +1,10 @@
 // lib/modules/admin/course/views/upload_course_screen.dart
 
-import 'dart:io';
 import 'package:blessing/core/constants/color.dart';
 import 'package:blessing/core/global_components/base_widget_container.dart';
 import 'package:blessing/core/global_components/global_text.dart';
+import 'package:blessing/core/global_components/picked_image.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:blessing/core/global_components/custom_text_field.dart';
 import 'package:blessing/modules/admin/course/controllers/admin_upload_course_controller.dart';
 import 'package:flutter/material.dart';
@@ -144,13 +145,13 @@ class UploadCourseScreen extends StatelessWidget {
                 return Column(
                   children: controller.contentItems.map((item) {
                     // Tampilkan item gambar
-                    if (item['type'] == 'image' && item['data'] is File) {
-                      final file = item['data'] as File;
+                    if (item['type'] == 'image' && item['data'] is XFile) {
+                      final file = item['data'] as XFile;
                       return _buildFileItem(
                         icon: Icons.image_outlined,
-                        fileName: file.path.split('/').last,
+                        fileName: file.name,
                         size:
-                            '${(file.lengthSync() / 1024 / 1024).toStringAsFixed(2)} MB',
+                            '${(((item['size'] as int?) ?? 0) / 1024 / 1024).toStringAsFixed(2)} MB',
                         color: Colors.purple.shade300,
                         onRemove: () => controller.removeContentItem(item),
                         file: file,
@@ -181,7 +182,7 @@ class UploadCourseScreen extends StatelessWidget {
     required String size,
     required Color color,
     required VoidCallback onRemove,
-    required File file, // Tambahkan file untuk menampilkan preview
+    required XFile file, // Tambahkan file untuk menampilkan preview
   }) {
     return Container(
       margin: EdgeInsets.only(bottom: 8.h),
@@ -195,8 +196,8 @@ class UploadCourseScreen extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8.r),
-            child: Image.file(
-              file,
+            child: PickedImage(
+              file: file,
               width: 40.w,
               height: 40.w,
               fit: BoxFit.cover,

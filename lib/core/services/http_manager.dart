@@ -1,11 +1,11 @@
 // lib/core/services/http_manager.dart
 
-import 'dart:io';
 import 'package:blessing/core/services/auth_interceptor.dart'; // Pastikan path ini benar
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:blessing/core/global_components/custom_snackbar.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
 
 abstract class HttpMethods {
   static const String post = "POST";
@@ -111,19 +111,19 @@ class HttpManager {
   /// Sangat ideal untuk mengunggah file. (Tidak ada perubahan di sini)
   Future<Map<String, dynamic>> uploadFileRequest({
     required String url,
-    required File file,
+    required XFile file,
     String fileFieldKey = 'file',
     bool showToastOnError = true,
   }) async {
     final headersDefault = {'accept': 'application/json'};
 
-    String fileName = file.path.split('/').last;
-    String mimeType = getMimeType(file.path);
+    final String fileName = file.name;
+    final String mimeType = getMimeType(fileName);
     List<String> mimeTypeParts = mimeType.split('/');
 
     FormData formData = FormData.fromMap({
-      fileFieldKey: await MultipartFile.fromFile(
-        file.path,
+      fileFieldKey: MultipartFile.fromBytes(
+        await file.readAsBytes(),
         filename: fileName,
         contentType: MediaType(mimeTypeParts[0], mimeTypeParts[1]),
       ),

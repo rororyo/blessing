@@ -1,12 +1,13 @@
 import 'package:blessing/core/constants/color.dart';
 import 'package:blessing/core/global_components/base_widget_container.dart';
 import 'package:blessing/core/global_components/global_text.dart';
+import 'package:blessing/core/global_components/picked_image.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:blessing/modules/admin/course/controllers/create_quiz_controller.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'dart:io';
 
 class CreateQuizScreen extends StatelessWidget {
   const CreateQuizScreen({super.key});
@@ -286,8 +287,8 @@ class CreateQuizScreen extends StatelessWidget {
                           maxWidth: constraints.maxWidth,
                           maxHeight: MediaQuery.of(context).size.height * 0.6, // Max 60% of screen height
                         ),
-                        child: Image.file(
-                          question.imageFile.value!,
+                        child: PickedImage(
+                          file: question.imageFile.value!,
                           fit: BoxFit.scaleDown, // Scale down if too large, but show original size if smaller
                         ),
                       ),
@@ -315,7 +316,7 @@ class CreateQuizScreen extends StatelessWidget {
     });
   }
 
-  void _showFullImageDialog(BuildContext context, File imageFile) {
+  void _showFullImageDialog(BuildContext context, XFile imageFile) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -328,8 +329,8 @@ class CreateQuizScreen extends StatelessWidget {
               InteractiveViewer(
                 minScale: 0.5,
                 maxScale: 4.0,
-                child: Image.file(
-                  imageFile,
+                child: PickedImage(
+                  file: imageFile,
                   fit: BoxFit.contain,
                 ),
               ),
@@ -501,8 +502,8 @@ class CreateQuizScreen extends StatelessWidget {
                           maxWidth: constraints.maxWidth,
                           maxHeight: 200.h,
                         ),
-                        child: Image.file(
-                          question.explanationImageFile.value!,
+                        child: PickedImage(
+                          file: question.explanationImageFile.value!,
                           fit: BoxFit.scaleDown,
                         ),
                       ),

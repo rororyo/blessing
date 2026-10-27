@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:blessing/core/services/endpoints.dart';
 import 'package:blessing/core/services/http_manager.dart';
@@ -111,7 +111,7 @@ class CourseDataSource {
     }
   }
 
-  Future<String?> _uploadImage(File imageFile) async {
+  Future<String?> _uploadImage(XFile imageFile) async {
     try {
       final url = Endpoints.uploadCourseDataForAdmin;
       final response = await _httpManager.uploadFileRequest(
@@ -150,9 +150,9 @@ class CourseDataSource {
       final List<Map<String, dynamic>> processedContent = [];
 
       for (final item in content) {
-        if (item['type'] == 'image' && item['data'] is File) {
+        if (item['type'] == 'image' && item['data'] is XFile) {
           // Jika item adalah gambar, unggah terlebih dahulu
-          File imageFile = item['data'];
+          XFile imageFile = item['data'];
           String? imageUrl = await _uploadImage(imageFile);
 
           if (imageUrl == null) {
@@ -160,7 +160,7 @@ class CourseDataSource {
             debugPrint('Failed to upload an image. Aborting course creation.');
             return false;
           }
-          // Ganti File object dengan URL string yang didapat dari server
+          // Ganti XFile object dengan URL string yang didapat dari server
           processedContent.add({'type': 'image', 'data': imageUrl});
         } else {
           // Jika item adalah teks atau tipe lain, langsung tambahkan

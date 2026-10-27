@@ -1,7 +1,5 @@
 // lib/modules/admin/course/controllers/admin_upload_course_controller.dart
 
-import 'dart:io';
-
 import 'package:blessing/core/global_components/custom_snackbar.dart';
 import 'package:blessing/core/utils/app_routes.dart';
 import 'package:blessing/data/course/repository/course_repository_impl.dart';
@@ -53,7 +51,8 @@ class AdminUploadCourseController extends GetxController {
         // Menambahkan gambar ke dalam list contentItems dengan format yang benar
         contentItems.add({
           'type': 'image',
-          'data': File(xFile.path),
+          'data': xFile,
+          'size': await xFile.length(),
         });
       }
     }

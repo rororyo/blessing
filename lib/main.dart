@@ -13,6 +13,8 @@ final SecureStorageUtil secureStorageUtil = SecureStorageUtil();
 final CacheUtil cacheUtil = CacheUtil();
 
 Future<void> disableScreenshot() async {
+  // Browsers cannot block screenshots and no_screenshot has no web support.
+  if (kIsWeb) return;
   bool result = await _noScreenshot.screenshotOff();
   if (kDebugMode) {
     debugPrint('Screenshot Off: $result');

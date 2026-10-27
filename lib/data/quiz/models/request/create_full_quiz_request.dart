@@ -1,11 +1,11 @@
 // data/quiz/models/request/create_full_quiz_request.dart
 
-import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 // Merepresentasikan satu pertanyaan lengkap dari sisi UI
 class QuestionDataRequest {
   final String description;
-  final File? imageFile;
+  final XFile? imageFile;
   final List<String> options;
   final int correctAnswerIndex;
 

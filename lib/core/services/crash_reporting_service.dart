@@ -17,6 +17,8 @@ class CrashReportingService {
   /// Initialize Firebase & Crashlytics
   Future<void> initialize() async {
     if (_isInitialized) return;
+    // Firebase is only configured for Android/iOS; Crashlytics has no web support.
+    if (kIsWeb) return;
 
     try {
       // Initialize Firebase

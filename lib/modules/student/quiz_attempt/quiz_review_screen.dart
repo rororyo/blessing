@@ -3,11 +3,13 @@ import 'package:blessing/core/global_components/base_widget_container.dart';
 import 'package:blessing/core/global_components/global_button.dart';
 import 'package:blessing/core/global_components/global_text.dart';
 import 'package:blessing/core/global_components/image_viewer_screen.dart';
+import 'package:blessing/core/global_components/web_youtube_player.dart';
 import 'package:blessing/core/utils/app_routes.dart';
 import 'package:blessing/data/core/models/content_block.dart';
 import 'package:blessing/modules/student/quiz_attempt/controller/quiz_attempt_controller.dart';
 import 'package:blessing/modules/student/quiz_attempt/controller/quiz_review_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -662,6 +664,7 @@ class YoutubeExplanationPlayer extends StatefulWidget {
 
 class _YoutubeExplanationPlayerState extends State<YoutubeExplanationPlayer> {
   late YoutubePlayerController _controller;
+  String? _videoId;
   bool _isValid = false;
 
   @override
@@ -670,6 +673,9 @@ class _YoutubeExplanationPlayerState extends State<YoutubeExplanationPlayer> {
     final videoId = YoutubePlayer.convertUrlToId(widget.videoUrl);
     if (videoId != null) {
       _isValid = true;
+      _videoId = videoId;
+      // The WebView based player is mobile only; web uses the iframe player.
+      if (kIsWeb) return;
       _controller = YoutubePlayerController(
         initialVideoId: videoId,
         flags: const YoutubePlayerFlags(
@@ -682,7 +688,7 @@ class _YoutubeExplanationPlayerState extends State<YoutubeExplanationPlayer> {
 
   @override
   void dispose() {
-    if (_isValid) {
+    if (_isValid && !kIsWeb) {
       _controller.dispose();
     }
     super.dispose();
@@ -702,6 +708,13 @@ class _YoutubeExplanationPlayerState extends State<YoutubeExplanationPlayer> {
           fontSize: 12.sp,
           color: Colors.red,
         ),
+      );
+    }
+
+    if (kIsWeb) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8.r),
+        child: WebYoutubePlayer(videoId: _videoId!),
       );
     }
 

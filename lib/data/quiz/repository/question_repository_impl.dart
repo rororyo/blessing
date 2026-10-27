@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:blessing/data/core/models/paging_response.dart';
 import 'package:blessing/data/quiz/datasource/question_remote_datasource.dart';
 import 'package:blessing/data/quiz/models/request/create_question_request.dart';
@@ -67,7 +67,7 @@ class QuestionRepository {
     }
   }
 
-  Future<String?> uploadQuestionImage(File imageFile) async {
+  Future<String?> uploadQuestionImage(XFile imageFile) async {
     try {
       final imageUrl = await _dataSource.uploadImage(imageFile);
       return imageUrl;

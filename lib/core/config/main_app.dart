@@ -1,8 +1,10 @@
 import 'package:blessing/core/constants/string.dart';
 import 'package:blessing/core/constants/color.dart';
 import 'package:blessing/core/global_components/custom_snackbar.dart';
+import 'package:blessing/core/global_components/web_frame.dart';
 import 'package:blessing/core/utils/app_pages.dart';
 import 'package:blessing/core/utils/app_routes.dart';
+import 'package:blessing/core/utils/app_scroll_behavior.dart';
 import 'package:blessing/modules/error/not_found_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -27,6 +29,7 @@ class _MainAppWrapperState extends State<MainAppWrapper> {
   }
 
   void listenForScreenshot() {
+    if (kIsWeb) return;
     _noScreenshot.screenshotStream.listen((value) {
       if (kDebugMode) {
         debugPrint('Screenshot taken: ${value.wasScreenshotTaken}');
@@ -56,11 +59,15 @@ class MainApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
+        WebFrame.capScreenUtil(context);
         return GetMaterialApp(
-          title: StringText.appName,
+          title: kIsWeb ? 'Blessing' : StringText.appName,
           debugShowCheckedModeBanner: false,
-          builder: (context, routedChild) =>
-              AppNotificationHost(child: routedChild ?? const SizedBox.shrink()),
+          scrollBehavior: const AppScrollBehavior(),
+          builder: (context, routedChild) => WebFrame(
+            child: AppNotificationHost(
+                child: routedChild ?? const SizedBox.shrink()),
+          ),
           initialRoute: AppRoutes.initial,
           getPages: AppPages.routes,
           unknownRoute: GetPage(
